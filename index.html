@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090e19">
+<meta name="description" content="Un plan diferente, hecho para dos.">
+<title>Vamos a salir</title>
+<style>
+:root{color-scheme:dark;--ink:#f4f7fc;--soft:#abb8ce;--blue:#3b82f6;--sky:#83b3ff;--stroke:rgba(155,183,229,.17);--panel:#101a2b}
+*{box-sizing:border-box}
+html{min-height:100%;scroll-behavior:smooth}
+body{margin:0;min-height:100svh;padding:clamp(20px,4vw,44px) 18px;background:radial-gradient(ellipse at 12% 8%,#1b3764 0%,transparent 45%),radial-gradient(ellipse at 85% 88%,#152b4b 0%,transparent 48%),linear-gradient(155deg,#101828,#080c14 80%);color:var(--ink);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;display:grid;place-items:center}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.26;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:56px 56px;mask-image:linear-gradient(#000,transparent)}
+button,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible{outline:2px solid #9cc5ff;outline-offset:3px}
+#app{width:min(100%,570px);position:relative}
+.top{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:22px;color:#a5b5d2;font-size:11px;font-weight:800;letter-spacing:.17em;text-transform:uppercase}
+.brand{display:flex;align-items:center;gap:12px;color:#edf4ff}.diamond{width:11px;height:11px;border-radius:2px;background:#448bff;transform:rotate(45deg);box-shadow:0 0 18px #408affaa}
+.progress{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin-bottom:19px}.progress>span{height:3px;background:#2a3951;border-radius:10px}.progress>.active{background:linear-gradient(90deg,#2468ed,#70b0ff);box-shadow:0 0 10px #2563eb77}
+.panel{position:relative;overflow:hidden;padding:clamp(25px,6vw,43px);min-height:378px;border-radius:25px;border:1px solid rgba(169,195,238,.24);background:linear-gradient(142deg,rgba(27,41,62,.92),rgba(12,20,34,.95));backdrop-filter:blur(25px);box-shadow:0 28px 90px #0008,inset 0 1px rgba(255,255,255,.08);animation:appear .34s ease both}
+.panel:before{content:"";position:absolute;top:-170px;right:-140px;width:370px;height:370px;background:radial-gradient(circle,#396dce1e,transparent 70%);pointer-events:none}
+@keyframes appear{from{opacity:.3;transform:translateY(11px)}to{opacity:1;transform:none}}
+.kicker{font-size:10px;letter-spacing:.24em;color:var(--sky);font-weight:850;text-transform:uppercase;margin-bottom:19px;position:relative}
+h1{font-size:clamp(30px,6.8vw,44px);line-height:1.14;letter-spacing:-.048em;font-weight:800;margin:0 0 15px;position:relative}
+.lead{color:var(--soft);font-size:15px;line-height:1.7;margin:0 0 26px;position:relative}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:53px;padding:13px 18px;border:1px solid #405570;border-radius:13px;background:#1b2a3e;color:#f4f8ff;font-size:14px;font-weight:750;transition:background .2s,transform .2s,box-shadow .2s}
+.btn:hover{background:#25374f;border-color:#6e92c4;transform:translateY(-1px)}.btn:active{transform:scale(.98)}
+.btn.main{background:linear-gradient(125deg,#205de7,#428cff);border-color:#619dff;box-shadow:0 10px 25px #2563eb38}.btn.main:hover{box-shadow:0 12px 28px #2563eb65}
+.btn.full{width:100%;margin-top:12px}.btn.ghost{background:transparent;color:#b4c3d9;border-color:#354762}
+.arena{position:relative;height:158px;background:#071425c4;border:1px solid #364762;border-radius:16px;overflow:hidden;margin:27px 0 0}
+.arena:before{content:"";position:absolute;inset:12px;border:1px dashed #384f6b60;border-radius:10px;pointer-events:none}
+.arena .btn{position:absolute;top:23px;width:112px;z-index:2}
+#yes{left:16px}#no{left:calc(100% - 128px);transition:left .23s cubic-bezier(.18,.65,.24,1),top .23s cubic-bezier(.18,.65,.24,1)}
+.note{font-size:12px;color:#849ab9;margin-top:15px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:13px}.field label,.label{display:block;color:#bbcce7;font-size:12px;font-weight:750;margin:17px 0 9px}
+.field input,.free-input{display:block;width:100%;height:58px;border:1px solid #3b506d;border-radius:12px;background:#0a172a;color:#f8fbff;padding:14px 16px;outline:0;font-size:18px}.field input:focus,.free-input:focus{border-color:#6ba7ff}
+.field input::placeholder,.free-input::placeholder{color:#72849e}
+.options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:13px 0 18px}
+.option{min-width:0;text-align:left;min-height:86px;padding:16px;border-radius:14px;border:1px solid #374b66;background:#0a182c;color:#f4f8ff;transition:background .2s,border-color .2s,transform .2s}
+.option:hover{background:#112541;border-color:#608ed3;transform:translateY(-1px)}
+.option[aria-pressed=true]{background:linear-gradient(130deg,#173b72,#142a4c);border-color:#68a7fc;box-shadow:inset 0 0 0 1px #3b82f63b}
+.option strong{display:block;font-size:14px;font-weight:760}.option small{display:block;color:#9eafc8;font-size:11px;margin-top:8px;line-height:1.35}
+.option[aria-pressed=true] strong:before{content:"✓ ";color:#94c2ff}
+.counter{font-size:12px;color:#89addd;margin:-4px 0 17px}
+.error{min-height:18px;color:#ffabba;font-size:12px;margin:8px 0}
+.summary{background:#0a1629;border:1px solid #354b69;border-radius:16px;padding:4px 20px;margin:22px 0 12px}
+.summary-row{padding:18px 0;border-bottom:1px solid #2d405b}.summary-row:last-child{border:0}
+.summary-row small{display:block;color:#87b5ff;font-size:10px;font-weight:800;letter-spacing:.15em;margin-bottom:9px}
+.summary-value{font-size:15px;line-height:1.55;font-weight:650;overflow-wrap:anywhere}
+.tags{display:flex;flex-wrap:wrap;gap:8px}.tag{display:inline-flex;padding:8px 11px;background:#162f4f;border:1px solid #33577f;border-radius:9px;color:#e0eeff;font-size:12px;font-weight:700;overflow-wrap:anywhere}
+.bottom{text-align:center;color:#7587a2;font-size:10px;font-weight:700;letter-spacing:.14em;margin:20px 0 0}
+@media(max-width:430px){body{padding:18px 13px}.panel{padding:26px 20px;border-radius:20px}.options{gap:9px}.option{padding:13px;min-height:82px}.top{font-size:10px}.arena .btn{width:103px}#no{left:calc(100% - 119px)}}
+@media(prefers-reduced-motion:reduce){.panel{animation:none}.btn,.option,#no{transition:none}}
+</style>
+</head>
+<body>
+<main id="app" aria-live="polite"></main>
+<script>
+'use strict';
+const app=document.getElementById('app');
+const $=id=>document.getElementById(id);
+const data={step:1,day:'',month:'',hour:'',activities:[],foods:[],custom:''};
+const times=[['5:00 PM','Temprano y tranquilo'],['6:00 PM','A buena hora'],['7:00 PM','Al caer la noche'],['8:00 PM','Sin prisa'],['9:00 PM','Un poco más tarde']];
+const activities=[['Go Karts','Un poco de adrenalina'],['Bowling','A ver quién gana'],['Arcade','Algo divertido'],['Salir a comer','Para terminar bien']];
+const foods=[['Pizza','Un clásico'],['Sushi','Algo diferente'],['Hamburguesas','Sin complicaciones'],['Pasta','Algo tranquilo'],['Tacos','Para variar'],['Carne','Una buena parrilla']];
+const months=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const safe=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function layout(title,description,kicker,html){
+  const progress=Array.from({length:6},(_,i)=>'<span class="'+(i<data.step?'active':'')+'"></span>').join('');
+  app.innerHTML='<header class="top"><div class="brand"><span class="diamond"></span> PLAN / DOS</div><div>PASO '+String(data.step).padStart(2,'0')+' / 06</div></header>'+
+  '<div class="progress" aria-label="Progreso">'+progress+'</div><section class="panel"><div class="kicker">'+kicker+'</div><h1>'+title+'</h1>'+
+  '<p class="lead">'+description+'</p>'+html+'</section><div class="bottom">UN PLAN DIFERENTE · HECHO PARA DOS</div>';
+}
+function button(text,fn,secondary=false){
+ const b=document.createElement('button');b.type='button';b.className='btn full '+(secondary?'ghost':'main');b.textContent=text;b.addEventListener('click',fn);return b;
+}
+function go(n){data.step=n;render();window.scrollTo(0,0);}
+function options(id,choices,selection,key){
+ const root=$(id);root.replaceChildren();
+ choices.forEach(([name,desc])=>{
+  const b=document.createElement('button');b.type='button';b.className='option';
+  const selected=key==='hour'?data.hour===name:selection.includes(name);
+  b.setAttribute('aria-pressed',String(selected));
+  const strong=document.createElement('strong');strong.textContent=name;
+  const small=document.createElement('small');small.textContent=desc;
+  b.append(strong,small);
+  b.onclick=()=>{
+   if(key==='hour'){data.hour=name;}
+   else{const i=selection.indexOf(name);if(i<0)selection.push(name);else selection.splice(i,1);}
+   options(id,choices,selection,key);
+   if(id==='acts')counter();
+  };
+  root.append(b);
+ });
+}
+function counter(){
+ const element=$('counter');if(!element)return;
+ const n=data.activities.length;
+ element.textContent=n===0?'Puedes seleccionar más de una actividad.':n===1?'1 actividad seleccionada':n+' actividades seleccionadas';
+}
+function evade(){
+ const container=$('arena'),no=$('no'),yes=$('yes');let last=0;
+ const move=e=>{
+  if(e&&e.cancelable)e.preventDefault();
+  if(Date.now()-last<110)return;last=Date.now();
+  const areaW=container.clientWidth,areaH=container.clientHeight,w=no.offsetWidth,h=no.offsetHeight;
+  const xMax=Math.max(8,areaW-w-8),yMax=Math.max(8,areaH-h-8);
+  let best=null,score=-1;
+  for(let i=0;i<75;i++){
+   const x=8+Math.random()*Math.max(0,xMax-8),y=8+Math.random()*Math.max(0,yMax-8);
+   const overlap=x<yes.offsetLeft+yes.offsetWidth+7&&x+w>yes.offsetLeft-7&&y<yes.offsetTop+yes.offsetHeight+7&&y+h>yes.offsetTop-7;
+   if(overlap)continue;
+   const distance=Math.hypot(x-no.offsetLeft,y-no.offsetTop);
+   if(distance>score){best={x,y};score=distance;}
+  }
+  if(best){no.style.left=best.x+'px';no.style.top=best.y+'px';}
+ };
+ no.addEventListener('pointerenter',move);
+ no.addEventListener('pointerdown',move);
+ no.addEventListener('touchstart',move,{passive:false});
+ no.addEventListener('click',move);
+}
+function render(){
+ switch(data.step){
+ case 1:
+  layout('Vamos a salir ¿sí?','Selecciona una opción para procesar la salida.','UNA PROPUESTA SENCILLA',
+  '<div class="arena" id="arena"><button class="btn main" id="yes" type="button">Dale</button><button class="btn" id="no" type="button">No</button></div><div class="note">Prometo que el plan vale la pena.</div>');
+  $('yes').onclick=()=>go(2);evade();break;
+ case 2:
+  layout('Vrg no pensé que le fueras a dar que si JAJAJA','Bueno, a darle','ESTO SE PUSO INTERESANTE','<div id="controls"></div>');
+  $('controls').append(button('Continuar',()=>go(3)));break;
+ case 3:
+  layout('¿Cuándo salimos?','Elige el día, mes y hora que prefieras.','01 / FECHA Y HORA',
+  '<div class="fields"><div class="field"><label for="day">Día</label><input id="day" type="text" inputmode="numeric" maxlength="2" placeholder="DD" value="'+safe(data.day)+'"></div>'+
+  '<div class="field"><label for="month">Mes</label><input id="month" type="text" inputmode="numeric" maxlength="2" placeholder="MM" value="'+safe(data.month)+'"></div></div>'+
+  '<div class="label">¿A qué hora?</div><div class="options" id="hours"></div><div class="error" id="error" role="alert"></div><div id="controls"></div>');
+  ['day','month'].forEach(k=>{$(k).oninput=e=>{e.target.value=e.target.value.replace(/\D/g,'').slice(0,2);data[k]=e.target.value;};});
+  options('hours',times,[],'hour');
+  $('controls').append(button('Continuar',()=>{
+   const day=Number(data.day),month=Number(data.month),days=[31,29,31,30,31,30,31,31,30,31,30,31];
+   if(!data.day||!data.month||!Number.isInteger(day)||!Number.isInteger(month)||month<1||month>12||day<1||day>days[month-1]||!data.hour){
+    $('error').textContent='Selecciona un día, mes y hora válidos.';return;
+   }
+   data.day=String(day).padStart(2,'0');data.month=String(month).padStart(2,'0');go(4);
+  }),button('Volver',()=>go(2),true));break;
+ case 4:
+  layout('¿Qué hacemos?','Elige una o varias actividades para nuestro plan.','02 / ACTIVIDADES',
+  '<div class="options" id="acts"></div><div class="counter" id="counter"></div><div class="error" id="error" role="alert"></div><div id="controls"></div>');
+  options('acts',activities,data.activities);counter();
+  $('controls').append(button('Continuar',()=>{
+   if(!data.activities.length){$('error').textContent='Selecciona al menos una actividad.';return;}
+   go(data.activities.includes('Salir a comer')?5:6);
+  }),button('Volver',()=>go(3),true));break;
+ case 5:
+  layout('¿Qué se te antoja?','Selecciona tus favoritos o escribe lo que prefieras.','03 / COMIDA',
+  '<div class="options" id="foods"></div><label for="custom" class="label">¿Prefieres otra cosa?</label>'+
+  '<input id="custom" class="free-input" maxlength="120" placeholder="Lo que tú quieras..." value="'+safe(data.custom)+'">'+
+  '<div class="note">Si prefieres, podemos decidir la comida después.</div><div id="controls"></div>');
+  options('foods',foods,data.foods);$('custom').oninput=e=>data.custom=e.target.value;
+  $('controls').append(button('Confirmar plan',()=>go(6)),button('Volver',()=>go(4),true));break;
+ case 6:{
+  const f=selectedFood();
+  layout('Ya tenemos plan.','Todo listo. Ahora solo falta ponernos de acuerdo.','04 / NUESTRO PLAN',
+  '<div class="summary"><div class="summary-row"><small>FECHA Y HORA</small><div class="summary-value" id="dateSummary"></div></div>'+
+  '<div class="summary-row"><small>ACTIVIDADES</small><div class="tags" id="activitySummary"></div></div>'+
+  (data.activities.includes('Salir a comer')?'<div class="summary-row"><small>COMIDA</small><div class="tags" id="foodSummary"></div></div>':'')+
+  '</div><div id="controls"></div>');
+  $('dateSummary').textContent=data.day+' de '+months[Number(data.month)-1]+' · '+data.hour;
+  tags('activitySummary',data.activities);
+  if($('foodSummary'))tags('foodSummary',f.length?f:['Por decidir']);
+  $('controls').append(button('Copiar plan y enviar',copyPlan),button('Modificar plan',()=>go(3),true));break;
+ }
+ }
+}
+function selectedFood(){return [...data.foods,...(data.custom.trim()?[data.custom.trim()]:[])];}
+function tags(id,values){const root=$(id);values.forEach(value=>{const t=document.createElement('span');t.className='tag';t.textContent=value;root.append(t);});}
+function planText(){
+ const f=selectedFood();
+ return 'NUESTRO PLAN\n\nFecha: '+data.day+'/'+data.month+'\nHora: '+data.hour+
+ '\n\nActividades:\n'+data.activities.map(a=>'• '+a).join('\n')+
+ (data.activities.includes('Salir a comer')?'\n\nComida:\n'+(f.length?f.map(a=>'• '+a).join('\n'):'• Por decidir'):'')+
+ '\n\n¿Confirmamos?';
+}
+async function copyPlan(){
+ const text=planText();
+ try{await navigator.clipboard.writeText(text);alert('¡Plan copiado! Ya puedes pegarlo en WhatsApp o Instagram.');}
+ catch(e){
+  const t=document.createElement('textarea');t.value=text;t.style.position='fixed';t.style.left='-9999px';document.body.append(t);t.select();
+  const ok=document.execCommand('copy');t.remove();
+  if(ok)alert('¡Plan copiado!');else prompt('Copia el plan manualmente:',text);
+ }
+}
+render();
+</script>
+</body>
+</html>
